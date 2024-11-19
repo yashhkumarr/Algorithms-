@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+void binary_search(int array[], int search, int min_index, int max_index) {
+    if (min_index > max_index) {
+        printf("Element not found in the list...\n");
+        return;
+    }
+    int mid_index = min_index + (max_index - min_index) / 2;
+    int mid = array[mid_index];
+
+    if (mid < search) {
+        binary_search(array, search, mid_index + 1, max_index);
+    } else if (mid > search) {
+        binary_search(array, search, min_index, mid_index - 1);
+    } else {
+        printf("Element found at index %d\n", mid_index);
+    }
+}
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+int main() {
+    int n, search;
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+
+    int array[n];
+    printf("Enter %d elements in sorted order:\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &array[i]);
+    }
+    printf("Enter the element to search: ");
+    scanf("%d", &search);
+    qsort(array, n, sizeof(int), compare);
+    clock_t t;
+    t = clock();
+    int min_index = 0;
+    int max_index = n - 1;
+    binary_search(array, search, min_index, max_index);
+    t = clock() - t;
+    double time_taken = ((double)t) / CLOCKS_PER_SEC; // in seconds
+    printf("Algorithm took %f seconds to execute\n", time_taken);
+    return 0;
+}
